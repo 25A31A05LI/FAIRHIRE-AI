@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bias Detection in Hiring</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Welcome Landing Page -->
+    <div id="welcome-container" class="welcome-container">
+        <!-- Glowing Background Elements -->
+        <div class="welcome-bg-glow"></div>
+        <div class="welcome-bg-glow-2"></div>
+
+        <!-- Top Navigation -->
+        <nav class="welcome-nav">
+            <div class="nav-logo" id="btn-welcome-home">
+                <i class="ph ph-scales"></i>
+                <span>FAIRHIRE AI</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn secondary" id="btn-welcome-contact"><i class="ph ph-envelope"></i> Contact Us</button>
+                <button class="btn secondary" id="btn-welcome-help"><i class="ph ph-question"></i> Help</button>
+                <button class="btn primary glow-btn" id="btn-welcome-login">Login / Sign Up <i class="ph ph-arrow-right"></i></button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="welcome-hero">
+            <div class="typewriter-container">
+                <h1 class="typewriter-text">WELCOME TO FAIRHIRE AI</h1>
+            </div>
+            <p class="welcome-subtitle">The intelligent, unbiased Applicant Tracking System designed to identify pure talent.</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-eye-slash"></i></div>
+                <h3>Blind Resume Parsing</h3>
+                <p>Analyzes candidate data strictly ignoring name, gender, and age to prevent initial human bias.</p>
+            </div>
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-cpu"></i></div>
+                <h3>AI Skill Extraction</h3>
+                <p>Powered by Gemini 1.5, extracts deep technical competencies, projects, and certifications perfectly.</p>
+            </div>
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-chart-pie-slice"></i></div>
+                <h3>Global Bias Analytics</h3>
+                <p>Aggregates historical hiring data into a comprehensive fairness dashboard using the 4/5ths Disparate Impact rule.</p>
+            </div>
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-chart-line-up"></i></div>
+                <h3>Neon Bias Trajectory</h3>
+                <p>Real-time visual tracking of AI vs. Human selection deviations to monitor ongoing recruiter bias.</p>
+            </div>
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-database"></i></div>
+                <h3>Dynamic Dataset Injection</h3>
+                <p>Upload custom CSV datasets instantly to visualize latent historical biases in your company.</p>
+            </div>
+            <div class="feature-card glass-morph">
+                <div class="feature-icon"><i class="ph ph-paper-plane-tilt"></i></div>
+                <h3>Automated Feedback Paths</h3>
+                <p>Generates personalized rejection emails complete with actionable learning recommendations.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Workflow Modal -->
+    <div id="help-modal" class="modal-overlay" style="display:none; z-index: 10001;">
+        <div class="modal-card glass wide">
+            <div class="modal-header">
+                <h3><i class="ph ph-info"></i> How to use FairHire AI</h3>
+                <button class="close-btn" id="close-help-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="text-align: left; margin-top: 1rem;">
+                <ol style="line-height: 1.8; color: var(--text-muted); padding-left: 1.5rem;">
+                    <li><strong>Login:</strong> Click 'Login / Sign Up' and enter a company name (or use dummy credentials).</li>
+                    <li><strong>Configuration:</strong> In the app, enter your Gemini API Key (or type "DEMO") and specify the job role and required skills.</li>
+                    <li><strong>Upload Resumes:</strong> Go to the 'Upload Resumes' tab and select PDF resumes to parse.</li>
+                    <li><strong>Review Candidates:</strong> The AI will instantly score and sort candidates blindly based on merit in the 'Detailed Reports' tab.</li>
+                    <li><strong>Analyze Bias:</strong> Click 'Detect Bias Analytics' to view your historical hiring fairness using the neon dashboard.</li>
+                    <li><strong>Upload Datasets:</strong> You can upload a <code>.csv</code> to the Configuration tab to simulate a company's historical hiring records instantly.</li>
+                </ol>
+                <button class="btn primary glow-btn full-width" id="btn-process" disabled style="margin-top: 1.5rem;"><i class="ph ph-cpu"></i> Run AI Analysis</button>
+            </div>
+            <button class="btn primary full-width" id="btn-understood-help" style="margin-top: 1.5rem;">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Contact Us Modal -->
+    <div id="contact-modal" class="modal-overlay" style="display:none; z-index: 10002;">
+        <div class="modal-card glass">
+            <div class="modal-header">
+                <h3><i class="ph ph-envelope"></i> Contact Us</h3>
+                <button class="close-btn" id="close-contact-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="text-align: left; margin-top: 1.5rem;">
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">We would love to hear from you. Please reach out to the appropriate email below:</p>
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <p style="margin-bottom: 0.5rem; font-size: 0.95rem;"><strong>FEEDBACK:</strong> <br><span style="color: var(--primary);">FAIRHIREAI.FEEDBACK@GMAIL.COM</span></p>
+                    <p style="font-size: 0.95rem;"><strong>COMPLAINTS:</strong> <br><span style="color: var(--danger);">FAIRHIREAI.COMPLAINT@GMAIL.COM</span></p>
+                </div>
+            </div>
+            <button class="btn secondary full-width" id="btn-close-contact-bottom" style="margin-top: 1.5rem;">Close</button>
+        </div>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="auth-container" style="display: none;">
+        <div class="welcome-bg-glow" style="background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(15,17,26,0) 70%);"></div>
+        <div class="welcome-bg-glow-2" style="background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(15,17,26,0) 70%);"></div>
+        <button id="btn-auth-back" class="btn secondary" style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;"><i class="ph ph-arrow-left"></i> Back to Welcome</button>
+        <div class="auth-card glass">
+            <div class="auth-header">
+                <i class="ph ph-scales"></i>
+                <h2>FAIRHIRE AI</h2>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-auth="login">Login</button>
+                <button class="auth-tab" data-auth="signup">Sign Up</button>
+            </div>
+
+            <div id="auth-login" class="auth-form-content active">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="login-company" placeholder="e.g. Acme Corp">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••">
+                </div>
+                <button class="btn primary glow-btn full-width" id="btn-login">Login to Dashboard</button>
+                <button type="button" class="btn secondary full-width glow-btn" id="btn-demo-login" style="margin-top: 10px; border: 1px solid var(--primary); background: rgba(99, 102, 241, 0.1); color: var(--text-main);">Demo Login</button>
+                <button class="btn secondary full-width" id="btn-forgot-pwd" style="margin-top: 10px; border: none; background: transparent; color: var(--primary);">Forgot Password?</button>
+            </div>
+
+            <div id="auth-signup" class="auth-form-content hidden">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="signup-company" placeholder="e.g. Acme Corp">
+                </div>
+                <div class="form-group">
+                    <label>Recruiter Name</label>
+                    <input type="text" id="signup-recruiter" placeholder="e.g. Jane Doe">
+                </div>
+                <div class="form-group">
+                    <label>Set Password</label>
+                    <input type="password" id="signup-password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Company Email</label>
+                    <input type="email" id="signup-email" placeholder="hr@acme.com" style="width:100%; padding:0.75rem 1rem; background:rgba(0,0,0,0.2); border:1px solid var(--border); border-radius:8px; color:var(--text-main); margin-bottom:10px;">
+                    <button type="button" class="btn secondary" id="btn-verify-email" style="padding: 0.5rem 1rem; font-size: 0.85rem; margin-top:0;">Send Verification Link</button>
+                </div>
+                <button type="button" class="btn primary glow-btn full-width" id="btn-signup" disabled>Create Organization Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Modal -->
+    <div id="otp-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass">
+            <h3>Email Verification</h3>
+            <p class="subtitle" id="otp-message">A 4-digit Demo OTP has been generated.</p>
+            <div class="otp-display" id="demo-otp-display">1234</div>
+            <div class="form-group">
+                <label>Enter OTP</label>
+                <input type="text" id="otp-input" placeholder="0000" maxlength="4" style="text-align:center; font-size: 1.5rem; letter-spacing: 5px;">
+            </div>
+            <button class="btn primary full-width" id="btn-confirm-otp">Verify</button>
+            <button class="btn secondary full-width" id="btn-cancel-otp">Cancel</button>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-container" style="display:none;">
+        <div class="welcome-bg-glow" style="background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, rgba(15,17,26,0) 70%); z-index: -1;"></div>
+        <div class="welcome-bg-glow-2" style="background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(15,17,26,0) 70%); z-index: -1;"></div>
+        
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="ph ph-scales"></i>
+                <span>FAIRHIRE AI</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active mode-new-hire" data-target="config-view">
+                    <i class="ph ph-gear"></i>
+                    <span>Configuration</span>
+                </li>
+                <li class="mode-new-hire" data-target="upload-view">
+                    <i class="ph ph-upload-simple"></i>
+                    <span>Upload Resumes</span>
+                </li>
+                <li class="mode-new-hire" data-target="reports-view">
+                    <i class="ph ph-users"></i>
+                    <span>Detailed Reports</span>
+                </li>
+                
+                <li class="mode-bias-detection hidden" data-target="bias-input-view">
+                    <i class="ph ph-database"></i>
+                    <span>Data Source</span>
+                </li>
+                <li class="mode-bias-detection hidden" data-target="dashboard-view">
+                    <i class="ph ph-chart-pie-slice"></i>
+                    <span>Bias Dashboard</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="mode-toggle-container">
+                    <button class="mode-toggle-btn active" id="btn-mode-newhire">NEW HIRE</button>
+                    <button class="mode-toggle-btn" id="btn-mode-bias">BIAS DETECTION</button>
+                </div>
+                <div class="global-profile" id="profile-trigger">
+                    <div class="profile-info">
+                        <strong id="header-company-name">Acme Corp</strong>
+                        <span id="header-recruiter-name">Jane Doe</span>
+                    </div>
+                    <div class="user-profile">
+                        <img id="header-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User">
+                    </div>
+                    
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <div class="dropdown-header">
+                            <p id="dropdown-email">hr@acme.com</p>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li id="menu-dashboard"><i class="ph ph-layout"></i> My Dashboard</li>
+                            <li id="menu-settings"><i class="ph ph-sliders"></i> Settings</li>
+                            <li class="divider"></li>
+                            <li id="menu-logout" class="logout"><i class="ph ph-sign-out"></i> Sign Out</li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <div class="view-container">
+                <!-- Configuration View -->
+                <section id="config-view" class="view active">
+                    <p class="guide-note"><i class="ph ph-lightbulb"></i> <strong>Guide: Step 1</strong> - Enter your Gemini API Key and define the job requirements. Use the "Fill Demo Config" button for a quick start.</p>
+                    <div class="card glass feature-card" style="margin-bottom: 2rem;">
+                        <h3><i class="ph ph-key" style="margin-right: 8px;"></i> AI Configuration</h3>
+                        <p>Configure your workspace settings before evaluating candidates.</p>
+                    </div>
+
+                    <div class="card glass">
+                        <h3>Organization Setup</h3>
+                        <p class="subtitle">Define the role and provide context for the AI agent to reduce bias.</p>
+                        
+                        <details class="advanced-settings">
+                            <summary>Advanced Developer Settings (API Key)</summary>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Gemini API Key (Or type DEMO) <span style="color: var(--danger)">*</span></label>
+                                <input type="password" id="api-key" placeholder="Paste Gemini Key or type DEMO for offline mode" value="DEMO">
+                                <span class="file-hint">Required for live AI. Default is <strong>DEMO</strong> for presentation mode!</span>
+                            </div>
+                        </details>
+
+                        <div class="form-group">
+                            <label>Job Role</label>
+                            <input type="text" id="job-role" placeholder="e.g., Senior Software Engineer">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Required Skills (comma separated)</label>
+                            <input type="text" id="job-skills" placeholder="e.g., React, Node.js, Python, System Design">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Number of Vacancies</label>
+                            <input type="number" id="job-vacancies" placeholder="e.g. 5" min="1" value="5">
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn secondary full-width" id="btn-demo-config"><i class="ph ph-magic-wand"></i> Fill Demo Config</button>
+                            <button class="btn primary glow-btn full-width" id="save-config"><i class="ph ph-floppy-disk"></i> Save & Connect AI</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upload View -->
+                <section id="upload-view" class="view">
+                    <p class="guide-note"><i class="ph ph-lightbulb"></i> <strong>Guide: Step 2</strong> - Upload candidate resumes in PDF format. The AI will extract and analyze them blindly. Click "Load Sample Resumes" to simulate a live upload.</p>
+                    <div class="upload-container feature-card">
+                        <div class="file-drop-zone" id="drop-zone">
+                            <h3>Upload Applicant Resumes</h3>
+                            <p class="subtitle">Upload real PDF resumes for AI analysis and bias checking.</p>
+                            
+                            <div class="file-drop-zone large" id="resume-dropzone">
+                                <i class="ph ph-files"></i>
+                                <p>Drag & Drop Resumes (PDF) here or Click to Browse</p>
+                                <input type="file" id="resume-file-input" multiple accept="application/pdf" style="display: none;">
+                                <button class="btn secondary" id="browse-files-btn">Browse Files</button>
+                                <button class="btn secondary" id="btn-load-sample-resumes" style="margin-top: 10px; border-color: var(--primary); color: var(--text-main);"><i class="ph ph-file-pdf"></i> Load Sample Resumes</button>
+                            </div>
+
+                            <div class="upload-progress" id="upload-progress" style="display:none;">
+                                <div class="ai-processing-container">
+                                    <div class="radar-spinner">
+                                        <div class="radar-beam"></div>
+                                    </div>
+                                    <div class="processing-details">
+                                        <h4 id="progress-status-text">Initializing AI Engine... <span id="progress-text">0%</span></h4>
+                                        <div class="advanced-progress-bar">
+                                            <div class="advanced-progress-fill" style="width: 0%">
+                                                <div class="glow-tip"></div>
+                                            </div>
+                                        </div>
+                                        <div class="terminal-logs" id="terminal-logs">
+                                            <!-- Logs injected by JS -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dashboard View -->
+                <section id="dashboard-view" class="view">
+                    <p class="guide-note"><i class="ph ph-lightbulb"></i> <strong>Guide: Step 5</strong> - Review fairness metrics. Click on the stat cards above to view specific candidates that fall into those categories.</p>
+                    <div class="dashboard-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="card glass stat-card clickable-stat" id="card-stat-total" data-filter="total" title="Click to view all candidates">
+                            <div class="stat-icon"><i class="ph ph-users"></i></div>
+                            <div class="stat-details">
+                                <h4>Total Applies</h4>
+                                <h2 id="stat-total">0</h2>
+                            </div>
+                        </div>
+                        <div class="card glass stat-card clickable-stat" id="card-stat-selected" data-filter="selected" title="Click to view selected candidates">
+                            <div class="stat-icon success"><i class="ph ph-check-circle"></i></div>
+                            <div class="stat-details">
+                                <h4>Selected</h4>
+                                <h2 id="stat-selected">0</h2>
+                            </div>
+                        </div>
+                        <div class="card glass stat-card clickable-stat" id="card-stat-rejected" data-filter="rejected" title="Click to view rejected candidates">
+                            <div class="stat-icon danger"><i class="ph ph-x-circle"></i></div>
+                            <div class="stat-details">
+                                <h4>Rejected</h4>
+                                <h2 id="stat-rejected">0</h2>
+                            </div>
+                        </div>
+                        <div class="card glass stat-card clickable-stat" id="card-stat-flags" data-filter="bias" title="Click to view candidates with bias flags">
+                            <div class="stat-icon warning"><i class="ph ph-warning"></i></div>
+                            <div class="stat-details">
+                                <h4>Bias Flags Detected</h4>
+                                <h2 id="stat-flags">0</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="card glass chart-wrapper">
+                            <h3>Overall Fairness Score</h3>
+                            <div class="fairness-gauge-container" style="position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 1.5rem;">
+                                <div style="position: relative; width: 150px; height: 150px;">
+                                    <svg class="radial-progress" width="150" height="150" viewBox="0 0 150 150" style="transform: rotate(-90deg);">
+                                        <defs>
+                                            <linearGradient id="rgbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#ef4444" />
+                                                <stop offset="50%" stop-color="#f59e0b" />
+                                                <stop offset="100%" stop-color="#10b981" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="radial-bg" cx="75" cy="75" r="65" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="none" />
+                                        <circle class="radial-fill" id="fairness-radial-fill" cx="75" cy="75" r="65" stroke="url(#rgbGradient)" stroke-width="12" fill="none" stroke-dasharray="408.4" stroke-dashoffset="408.4" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-out;" />
+                                    </svg>
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                        <h1 id="fairness-score-text" style="font-size: 2rem; margin:0; text-shadow: 0 0 10px rgba(255,255,255,0.3);">0%</h1>
+                                    </div>
+                                </div>
+                                <p class="subtitle" id="fairness-subtitle" style="margin-top: 1rem; font-weight: 600;">Calculating...</p>
+                            </div>
+                        </div>
+                        <div class="card glass recommendations-wrapper">
+                            <h3>AI Organization Recommendations</h3>
+                            <ul class="recommendation-list" id="recommendation-list">
+                                <!-- Populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="historical-bias-section">
+                        <h2><i class="ph ph-shield-check"></i> BIAS DETECTION (Historical Analytics)</h2>
+                        <div class="bias-analysis-grid">
+                            <div class="card glass">
+                                <h3>Overall Recruitment Fairness</h3>
+                                <div class="chart-container-small">
+                                    <canvas id="historicalGenderChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card glass">
+                                <h3>Bias Vectors Detected</h3>
+                                <div class="bias-vectors-list" id="bias-vectors-list">
+                                    <div class="bias-vector-item">
+                                        <div class="vector-icon"><i class="ph ph-gender-intersex"></i></div>
+                                        <div class="vector-info">
+                                            <h4>Gender Diversity</h4>
+                                            <div class="progress-bar-small"><div class="progress-fill-small" style="width: 85%;"></div></div>
+                                            <span>85% Fairness Score</span>
+                                        </div>
+                                    </div>
+                                    <div class="bias-vector-item">
+                                        <div class="vector-icon"><i class="ph ph-graduation-cap"></i></div>
+                                        <div class="vector-info">
+                                            <h4>Institution Preference</h4>
+                                            <div class="progress-bar-small"><div class="progress-fill-small danger" style="width: 45%;"></div></div>
+                                            <span>45% Bias Alert: Tier-1 Preference</span>
+                                        </div>
+                                    </div>
+                                    <div class="bias-vector-item">
+                                        <div class="vector-icon"><i class="ph ph-exam"></i></div>
+                                        <div class="vector-info">
+                                            <h4>CGPA Weightage</h4>
+                                            <div class="progress-bar-small"><div class="progress-fill-small warning" style="width: 65%;"></div></div>
+                                            <span>65% Correlation Detected</span>
+                                        </div>
+                                    </div>
+                                    <div class="bias-vector-item">
+                                        <div class="vector-icon"><i class="ph ph-briefcase"></i></div>
+                                        <div class="vector-info">
+                                            <h4>Skill Alignment</h4>
+                                            <div class="progress-bar-small"><div class="progress-fill-small" style="width: 92%;"></div></div>
+                                            <span>92% Merit-based Score</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports View -->
+                <section id="reports-view" class="view">
+                    <p class="guide-note"><i class="ph ph-lightbulb"></i> <strong>Guide: Step 3</strong> - Review the AI's unbiased rankings. Try manually accepting a rejected candidate to trigger the bias detection flag, and use the "Automate Emails" button to send AI-generated feedback.</p>
+                    <div class="reports-header" style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 2rem;">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="reports-summary-cards">
+                                <div class="summary-chip success">
+                                    <i class="ph ph-check-circle"></i>
+                                    <span id="summary-selected-count">0 Selected</span>
+                                </div>
+                                <div class="summary-chip danger">
+                                    <i class="ph ph-x-circle"></i>
+                                    <span id="summary-rejected-count">0 Rejected</span>
+                                </div>
+                            </div>
+                            <div class="tabs" style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                                <button class="tab active" data-tab="selected">Selected Candidates</button>
+                                <button class="tab" data-tab="rejected">Rejected Candidates</button>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn primary glow-btn" id="btn-automate-emails" style="display: flex; align-items: center; gap: 0.5rem;"><i class="ph ph-paper-plane-tilt"></i> Automate Emails</button>
+                        </div>
+                    </div>
+
+                    <!-- Neon Bias Analysis Graph -->
+                    <div class="card glass feature-card" style="margin-bottom: 2rem; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <i class="ph ph-chart-line-up" style="color: #f12711; font-size: 1.5rem; filter: drop-shadow(0 0 5px #f5af19);"></i>
+                            <h3 style="margin: 0; background: linear-gradient(to right, #f12711, #f5af19); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Bias Flags Trajectory</h3>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">This line graph tracks the accumulation of AI-detected bias flags (e.g. non-traditional backgrounds, age, employment gaps) across the processed candidate pool.</p>
+                        <div class="chart-container" style="height: 200px; width: 100%;">
+                            <canvas id="neonBiasGraph"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="reports-content">
+                        <!-- Selected Tab -->
+                        <div id="tab-selected" class="tab-content active">
+                            <div class="candidates-grid" id="selected-grid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Rejected Tab -->
+                        <div id="tab-rejected" class="tab-content">
+                            <div class="candidates-grid" id="rejected-grid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Bias Detect Button -->
+                    <button class="btn primary" id="btn-floating-bias-detect" style="position: fixed; top: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; border-radius: 50px; padding: 1rem 1.5rem; box-shadow: 0 8px 25px rgba(241, 39, 17, 0.5); background: linear-gradient(135deg, #f12711, #f5af19); display: flex; align-items: center; gap: 0.5rem; transition: transform 0.2s, box-shadow 0.2s;">
+                        <i class="ph ph-shield-warning" style="font-size: 1.2rem;"></i> Detect Bias Analytics
+                    </button>
+                </section>
+
+                <!-- Bias Data Input View (BIAS DETECTION) -->
+                <section id="bias-input-view" class="view">
+                    <p class="guide-note"><i class="ph ph-lightbulb"></i> <strong>Guide: Step 4</strong> - Connect your Firebase history or upload a custom HR dataset (CSV) to analyze systemic biases.</p>
+                    <!-- Top Box: Firebase Global Data -->
+                    <div class="card glass feature-card" style="margin-bottom: 2rem; border-left: 4px solid var(--success);">
+                        <h3><i class="ph ph-globe" style="color: var(--success); margin-right: 8px;"></i> Global Data Source</h3>
+                        <p class="subtitle">Aggregate and analyze your entire company's live recruitment history.</p>
+                        
+                        <div class="form-group" style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); margin-top: 1rem;">
+                            <div class="context-toggle-group" style="margin-top: 0; border: none; background: transparent; padding: 0;">
+                                <label class="toggle-container">
+                                    <input type="checkbox" id="bias-use-history-toggle" checked>
+                                    <span class="toggle-slider" style="background-color: var(--success);"></span>
+                                </label>
+                                <div class="toggle-text">
+                                    <strong style="color: var(--success);">Use Firebase Historical Data</strong>
+                                    <p style="margin-top: 0.25rem;">This will automatically fetch all past NEW HIRE data to calculate the overall fairness score.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn primary glow-btn full-width" id="btn-analyze-bias" style="margin-top: 1rem; background: var(--success); font-size: 1.1rem; padding: 1rem;"><i class="ph ph-chart-pie-slice"></i> Generate Global Bias Dashboard</button>
+                    </div>
+
+                    <!-- Custom Context Upload -->
+                    <div class="card glass feature-card">
+                        <h3><i class="ph ph-file-csv" style="margin-right: 8px;"></i> Company Past Dataset (.txt / .csv)</h3>
+                        <p class="subtitle">Alternatively, turn off Firebase above and upload a specific CSV/JSON dataset for isolated analysis.</p>
+
+                        <div class="form-group" id="bias-dataset-upload-group" style="margin-top: 1rem; pointer-events: none;">
+                            <div class="file-drop-zone" id="bias-dataset-dropzone">
+                                <i class="ph ph-database"></i>
+                                <p>Drag & Drop historical data or click to upload</p>
+                                <input type="file" id="bias-dataset-file-input" accept=".csv,.json,.txt" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- AI Chatbot Sidebar (Docked Right) -->
+        <aside class="chatbot-sidebar" id="chatbot-sidebar">
+            <div class="chatbot-header">
+                <h3><i class="ph ph-robot"></i> Gemini Assistant</h3>
+                <button id="toggle-chatbot-btn"><i class="ph ph-caret-right"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="chat-message ai-message">
+                    Hello! I'm your Gemini AI assistant. How can I help you analyze these candidates or evaluate your historical fairness?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-text-input" placeholder="Ask AI anything...">
+                <button id="chatbot-send-btn"><i class="ph ph-paper-plane-tilt"></i></button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Bias Candidate List Modal -->
+    <div id="bias-candidates-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass wide" style="max-width: 800px; text-align: left; max-height: 80vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <h3><i class="ph ph-users"></i> <span id="bias-candidates-title">Candidates</span></h3>
+                <button class="close-btn" id="close-bias-candidates-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding: 1rem; flex: 1;">
+                <div class="candidates-grid" id="bias-candidates-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Progress Modal -->
+    <div id="email-progress-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass wide" style="text-align: left;">
+            <div class="modal-header">
+                <h3><i class="ph ph-paper-plane-tilt"></i> Dispatching AI Candidate Feedback...</h3>
+                <button class="close-btn" id="close-email-modal" style="display:none;"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <!-- Step 1: Confirmation -->
+            <div id="email-confirmation-step">
+                <p><strong>Sender:</strong> <span id="email-sender-address">hr@company.com</span></p>
+                <p style="margin-top:0.5rem;">Review the list of candidates receiving automated AI feedback:</p>
+                <ul id="email-candidate-list" style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin: 1rem 0; list-style: none; color: var(--text-muted); font-size: 0.9rem;">
+                    <!-- Populated by JS -->
+                </ul>
+                <div style="display:flex; gap:1rem;">
+                    <button class="btn primary" id="btn-confirm-send-emails" style="flex:1;">Confirm & Dispatch</button>
+                    <button class="btn secondary" id="btn-cancel-emails" style="flex:1;">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Progress / Dispatch -->
+            <div id="email-progress-step" style="display:none;">
+                <div class="email-dispatch-status" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                    <p style="margin:0;">Below is the list of candidates and their auto-generated personalized feedback emails. Click to dispatch each via your native mail client.</p>
+                    <button class="btn primary" id="btn-dispatch-all" style="white-space: nowrap;"><i class="ph ph-paper-plane-tilt"></i> Dispatch All</button>
+                </div>
+                <div class="terminal-logs" id="email-dispatch-list" style="height: 300px; overflow-y: auto; background: var(--bg-card); padding: 1rem; border-radius: 8px;">
+                    <!-- Real mailto buttons injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Preview Modal -->
+    <div id="email-preview-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass wide" style="text-align: left;">
+            <div class="modal-header">
+                <h3><i class="ph ph-envelope-open"></i> Live Email Preview</h3>
+                <button class="close-btn" id="close-email-preview"><i class="ph ph-x"></i></button>
+            </div>
+            <div id="email-preview-body" style="white-space: pre-wrap; font-family: monospace; font-size: 0.95rem; margin-top: 1rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; max-height: 400px; overflow-y: auto; line-height: 1.5;">
+                <!-- Populated by JS -->
+            </div>
+            <button class="btn secondary full-width" id="close-email-preview-bottom" style="margin-top: 1.5rem;">Close Preview</button>
+        </div>
+    </div>
+
+    <!-- Usage Dashboard Modal -->
+    <div id="dashboard-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass wide">
+            <div class="modal-header">
+                <h3><i class="ph ph-layout"></i> My Dashboard</h3>
+                <button class="close-btn" id="close-dashboard"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <!-- Organization Profile Edit -->
+            <div class="user-details-section" style="text-align: left; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;"><i class="ph ph-user"></i> Organization Profile</h4>
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="edit-profile-company" value="">
+                </div>
+                <div class="form-group">
+                    <label>Recruiter Name</label>
+                    <input type="text" id="edit-profile-recruiter" value="">
+                </div>
+                <button class="btn primary" id="btn-save-profile" style="width: 100%; margin-top: 0.5rem;"><i class="ph ph-floppy-disk"></i> Save Profile Details</button>
+            </div>
+
+            <!-- Usage Analytics -->
+            <h4 style="text-align: left; color: var(--text-muted); margin-bottom: 1rem;"><i class="ph ph-chart-bar"></i> Usage Analytics</h4>
+            <div class="usage-grid">
+                <div class="usage-stat">
+                    <span>Total Analyzed</span>
+                    <h3 id="usage-total">0</h3>
+                </div>
+                <div class="usage-stat">
+                    <span>Bias Flags</span>
+                    <h3 id="usage-flags">0</h3>
+                </div>
+                <div class="usage-stat">
+                    <span>Active Sessions</span>
+                    <h3 id="usage-sessions">0</h3>
+                </div>
+            </div>
+            <div class="usage-chart-container">
+                <canvas id="usageHistoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass">
+            <div class="modal-header">
+                <h3><i class="ph ph-gear"></i> Account Settings</h3>
+                <button class="close-btn" id="close-settings"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="form-group">
+                <label>Profile Picture (JPEG)</label>
+                <div class="profile-upload-area" id="profile-upload-trigger">
+                    <i class="ph ph-camera"></i>
+                    <p>Change Picture</p>
+                    <input type="file" id="profile-pic-input" accept="image/jpeg" style="display:none;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Theme</label>
+                <select id="theme-select" class="form-control">
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                </select>
+            </div>
+            <button class="btn primary full-width" id="save-settings">Close</button>
+        </div>
+    </div>
+
+    <button id="theme-toggle-btn" class="torch-btn" title="Toggle Light/Dark Mode">
+        <i class="ph ph-flashlight"></i>
+    </button>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    
+    <script src="firebase-config.js"></script>
+    <script src="aiAgent.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
