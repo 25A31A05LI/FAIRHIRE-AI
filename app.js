@@ -872,7 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveConfigBtn.addEventListener('click', () => {
         let apiKey = document.getElementById('api-key').value.trim();
         if (!apiKey) {
-            apiKey = "AIzaSyBCoQVIA3SjtLXxHONr0Mv_qOmYRB-qsUg"; // default fallback
+            apiKey = ""; // default fallback
         }
 
         const role = document.getElementById('job-role').value || "Senior Software Engineer";
